@@ -22,7 +22,7 @@ AI-written code is provided in `films_gpt.py`
 ### Installation
 1. Clone this repository.
 ```
-git clone https://github.com/okqsna/week5-movies.git
+git clone https://github.com/okqsna/week5-films-service.git
 ```
 2. Ensure `Python 3.12` is installed on your machine.
 
