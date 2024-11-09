@@ -51,7 +51,13 @@ def top_n(data: list[list], genres: str='', n: int=0) -> list[tuple]:
         :param data: list[list], A list of all movie dat.
         :return: float, The average actor rating for the given movie.
         """
-        pass
+        actors_rating = []
+
+        for actor in movie[5].split(', '):
+            actor_rating = [float(film[8]) for film in data if actor in film[5]]
+            actors_rating.append(max(actor_rating))
+
+        return sum(actors_rating) / len(actors_rating)
 
     def sort_film(movie: tuple[str, float]) -> tuple[float, str]:
         """
@@ -60,9 +66,20 @@ def top_n(data: list[list], genres: str='', n: int=0) -> list[tuple]:
         :param movie: tuple[str, float], A tuple with the movie title and its rating (float).
         :return: tuple[float, str], A tuple with the negative rating (for descending) and title.
         """
-        pass
+        return -movie[1], movie[0]
 
-    pass
+    films = []
+
+    for el in data:
+        if genres and not any(list(genre in genres for genre in el[2].split(','))):
+            continue
+
+        actors_rating = calculate_actors_rating(el, data)
+        films.append((el[1], (float(el[8]) + actors_rating) / 2))
+
+    sorted_films = sorted(films, key=sort_film)
+
+    return sorted_films[:n] if n else sorted_films
 
 def write_file(top: list[tuple], file_name: str) -> None:
     """
