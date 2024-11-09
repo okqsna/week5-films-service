@@ -16,7 +16,14 @@ def read_file(pathname: str, year: int=0) -> list[list]:
     >>> read_file('films.csv', 2014)[:2]
     [['1', 'Guardians of the Galaxy', 'Action,Adventure,Sci-Fi', 'A group of intergalactic criminals are forced to work together to stop a fanatical warrior from taking control of the universe.', 'James Gunn', 'Chris Pratt, Vin Diesel, Bradley Cooper, Zoe Saldana', '2014', '121', '8.1', '757074', '333.13', '76.0'], ['3', 'Split', 'Horror,Thriller', 'Three girls are kidnapped by a man with a diagnosed 23 distinct personalities. They must try to escape before the apparent emergence of a frightful new 24th.', 'M. Night Shyamalan', 'James McAvoy, Anya Taylor-Joy, Haley Lu Richardson, Jessica Sula', '2016', '117', '7.3', '157606', '138.12', '62.0']]
     """
-    pass
+    res_data = []
+    with open(pathname, 'r', encoding="utf-8") as file:
+        for line in file:
+            if line[0].isdigit():
+                line = line.strip().split(';')
+                if year <= int(line[6]):
+                    res_data.append(line)
+    return res_data
 
 def top_n(data: list[list], genres: str='', n: int=0) -> list[tuple]:
     """
