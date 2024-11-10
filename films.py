@@ -14,7 +14,13 @@ def read_file(pathname: str, year: int=0) -> list[list]:
     :return: list[list], filtered data by year
 
     >>> read_file('films.csv', 2014)[:2]
-    [['1', 'Guardians of the Galaxy', 'Action,Adventure,Sci-Fi', 'A group of intergalactic criminals are forced to work together to stop a fanatical warrior from taking control of the universe.', 'James Gunn', 'Chris Pratt, Vin Diesel, Bradley Cooper, Zoe Saldana', '2014', '121', '8.1', '757074', '333.13', '76.0'], ['3', 'Split', 'Horror,Thriller', 'Three girls are kidnapped by a man with a diagnosed 23 distinct personalities. They must try to escape before the apparent emergence of a frightful new 24th.', 'M. Night Shyamalan', 'James McAvoy, Anya Taylor-Joy, Haley Lu Richardson, Jessica Sula', '2016', '117', '7.3', '157606', '138.12', '62.0']]
+    [['1', 'Guardians of the Galaxy', 'Action,Adventure,Sci-Fi', 'A group of intergalactic \
+criminals are forced to work together to stop a fanatical warrior from taking control of the \
+universe.', 'James Gunn', 'Chris Pratt, Vin Diesel, Bradley Cooper, Zoe Saldana', '2014', '121', \
+'8.1', '757074', '333.13', '76.0'], ['3', 'Split', 'Horror,Thriller', 'Three girls are kidnapped \
+by a man with a diagnosed 23 distinct personalities. They must try to escape before the apparent \
+emergence of a frightful new 24th.', 'M. Night Shyamalan', 'James McAvoy, Anya Taylor-Joy, Haley \
+Lu Richardson, Jessica Sula', '2016', '117', '7.3', '157606', '138.12', '62.0']]
     """
     res_data = []
     with open(pathname, 'r', encoding="utf-8") as file:
@@ -108,8 +114,13 @@ def write_file(top: list[tuple], file_name: str) -> None:
     Star Wars: Episode VII - The Force Awakens, 8.1
     """
     with open(file_name, 'w', encoding='utf-8') as output_file:
-        for movie, rating in top:
-            output_file.write(f'{movie}, {rating}')
+        top_length = len(top) - 1
+        for i, movie_info in enumerate(top):
+            title, rating = movie_info
+            if i < top_length:
+                output_file.write(f'{title}, {rating}\n')
+            else:
+                output_file.write(f'{title}, {rating}')
 
 
 if __name__ == '__main__':
