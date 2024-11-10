@@ -25,6 +25,7 @@ def read_file(pathname: str, year: int=0) -> list[list]:
                     res_data.append(line)
     return res_data
 
+
 def top_n(data: list[list], genres: str='', n: int=0) -> list[tuple]:
     """
     function filters movies by genre, actors rating 
@@ -59,6 +60,7 @@ def top_n(data: list[list], genres: str='', n: int=0) -> list[tuple]:
 
         return sum(actors_rating) / len(actors_rating)
 
+    
     def sort_film(movie: tuple[str, float]) -> tuple[float, str]:
         """
         Returns a tuple that sorts by descending rating and name alphabetically.
@@ -80,6 +82,7 @@ def top_n(data: list[list], genres: str='', n: int=0) -> list[tuple]:
     sorted_films = sorted(films, key=sort_film)
 
     return sorted_films[:n] if n else sorted_films
+
 
 def write_file(top: list[tuple], file_name: str) -> None:
     """
@@ -104,7 +107,10 @@ def write_file(top: list[tuple], file_name: str) -> None:
     Mad Max: Fury Road, 8.1
     Star Wars: Episode VII - The Force Awakens, 8.1
     """
-    pass
+    with open(file_name, 'w', encoding='utf-8') as output_file:
+        for movie, rating in top:
+            output_file.write(f'{movie}, {rating}')
+
 
 if __name__ == '__main__':
     import doctest
