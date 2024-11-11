@@ -38,17 +38,20 @@ def top_n(data: list, genre: str = '', n: int = 0):
     Returns:
     - A list of tuples, each containing (Title, Average_rating).
 
-    >>> data = [
-    >>>     ['1', 'Guardians of the Galaxy', 'Action,Adventure,Sci-Fi', 'A group of intergalactic criminals are forced to work together to stop a fanatical warrior from taking control of the universe.', 'James Gunn', 'Chris Pratt, Vin Diesel, Bradley Cooper, Zoe Saldana', '2014', '121', '8.1', '757074', '333.13', '76.0'],
-    >>>     ['3', 'Split', 'Horror,Thriller', 'Three girls are kidnapped by a man with a diagnosed 23 distinct personalities. They must try to escape before the apparent emergence of a frightful new 24th.', 'M. Night Shyamalan', 'James McAvoy, Anya Taylor-Joy, Haley Lu Richardson, Jessica Sula', '2016', '117', '7.3', '157606', '138.12', '62.0']
-    >>> ]
-    >>> top_n(data, genre='Action', n=1)
+    >>> dat = [['1', 'Guardians of the Galaxy', 'Action,Adventure,Sci-Fi', 'A group of intergalactic \
+criminals are forced to work together to stop a fanatical warrior from taking control of the universe.',\
+ 'James Gunn', 'Chris Pratt, Vin Diesel, Bradley Cooper, Zoe Saldana', '2014', '121', '8.1', '757074', \
+'333.13', '76.0'], ['3', 'Split', 'Horror,Thriller', 'Three girls are kidnapped by a man with a diagnosed \
+23 distinct personalities. They must try to escape before the apparent emergence of a frightful new 24th.', \
+'M. Night Shyamalan', 'James McAvoy, Anya Taylor-Joy, Haley Lu Richardson, Jessica Sula', '2016', '117', \
+'7.3', '157606', '138.12', '62.0']]
+    >>> top_n(dat, genre='Action', n=1)
     [('Guardians of the Galaxy', 8.1)]
     
-    >>> top_n(data, genre='Horror,Thriller', n=0)
+    >>> top_n(dat, genre='Horror,Thriller', n=0)
     [('Split', 7.3), ('Guardians of the Galaxy', 8.1)]
 
-    >>> top_n(data, genre='', n=1)
+    >>> top_n(dat, genre='', n=1)
     [('Guardians of the Galaxy', 8.1)]
     """
     
