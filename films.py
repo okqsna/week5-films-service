@@ -27,7 +27,8 @@ Lu Richardson, Jessica Sula', '2016', '117', '7.3', '157606', '138.12', '62.0']]
         for line in file:
             if line[0].isdigit():
                 line = line.strip().split(';')
-                if year <= int(line[6]):
+                year_of_production = line[6]
+                if year <= int(year_of_production):
                     res_data.append(line)
     return res_data
 
