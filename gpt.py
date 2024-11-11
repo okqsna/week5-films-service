@@ -151,5 +151,9 @@ def write_file(top: list, file_name: str):
     Bahubali, 8.3
     """
     with open(file_name, 'w') as file:
-        for title, avg_rating in top:
-            file.write(f"{title}, {avg_rating:.1f}\n")
+        for i, (title, avg_rating) in enumerate(top):
+            # Write without a newline for the last element
+            if i < len(top) - 1:
+                file.write(f"{title}, {avg_rating:.1f}\n")
+            else:
+                file.write(f"{title}, {avg_rating:.1f}")
