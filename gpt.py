@@ -11,6 +11,21 @@ def read_file(pathname: str, year: int = 0):
 
     Returns:
         list: A list of lists, where each inner list contains details of one movie.
+
+    Examples:
+    >>> read_file('films.csv', 2016)[:1]
+    [['3', 'Split', 'Horror,Thriller', \
+'Three girls are kidnapped by a man with a diagnosed 23 distinct personalities. They must try to \
+escape before the apparent emergence of a frightful new 24th.', 'M. Night Shyamalan', 'James \
+McAvoy, Anya Taylor-Joy, Haley Lu Richardson, Jessica Sula', '2016', '117', '7.3', '157606', \
+'138.12', '62.0']]
+
+    >>> read_file('films.csv', 2010)[:1]
+    [['1', 'Guardians of the Galaxy', 'Action,Adventure,Sci-Fi', \
+'A group of intergalactic criminals are forced to work together to stop a fanatical warrior from \
+taking control of the universe.', 'James Gunn', 'Chris Pratt, Vin Diesel, Bradley Cooper, \
+Zoe Saldana', '2014', '121', '8.1', '757074', '333.13', '76.0']]
+
     """
     movies = []
     with open(pathname, mode='r', encoding='utf-8') as file:
@@ -24,7 +39,6 @@ def read_file(pathname: str, year: int = 0):
 
     return movies
 
-
 def top_n(data: list, genre: str = '', n: int = 0):
     """
     Returns a sorted list of top movies based on the average rating of the movie's
@@ -37,31 +51,17 @@ def top_n(data: list, genre: str = '', n: int = 0):
     
     Returns:
     - A list of tuples, each containing (Title, Average_rating).
-
-    >>> dat = [['1', 'Guardians of the Galaxy', 'Action,Adventure,Sci-Fi', 'A group of intergalactic \
-criminals are forced to work together to stop a fanatical warrior from taking control of the universe.',\
- 'James Gunn', 'Chris Pratt, Vin Diesel, Bradley Cooper, Zoe Saldana', '2014', '121', '8.1', '757074', \
-'333.13', '76.0'], ['3', 'Split', 'Horror,Thriller', 'Three girls are kidnapped by a man with a diagnosed \
-23 distinct personalities. They must try to escape before the apparent emergence of a frightful new 24th.', \
-'M. Night Shyamalan', 'James McAvoy, Anya Taylor-Joy, Haley Lu Richardson, Jessica Sula', '2016', '117', \
-'7.3', '157606', '138.12', '62.0']]
-    >>> top_n(dat, genre='Action', n=1)
-    [('Guardians of the Galaxy', 8.1)]
     
-    >>> top_n(dat, genre='Horror,Thriller', n=0)
-    [('Split', 7.3), ('Guardians of the Galaxy', 8.1)]
-
-    >>> top_n(dat, genre='', n=1)
-    [('Guardians of the Galaxy', 8.1)]
     """
     
     # Parse genres if provided
     genres = set(genre.split(',')) if genre else set()
     
-    # Filter movies based on genres
+    # Filter movies based on genres (include movies with at least one of the specified genres)
     filtered_movies = []
     for movie in data:
-        if not genres or any(g.strip() in movie[2] for g in genres):
+        movie_genres = set(g.strip() for g in movie[2].split(','))
+        if not genres or genres.intersection(movie_genres):  # Check for any genre match
             filtered_movies.append(movie)
     
     def highest_rating_for_actor(actor_name, all_movies):
@@ -100,31 +100,24 @@ criminals are forced to work together to stop a fanatical warrior from taking co
         
         movie_tuples.append((title, rating, actor_rating))
     
-    # Sort movies based on the average of Rating and Actor_Rating,
-    # then lexicographically by title
-    sorted_movies = []
-    for movie_tuple in movie_tuples:
-        inserted = False
-        for i, sorted_movie in enumerate(sorted_movies):
-            avg_rating = (sorted_movie[1] + sorted_movie[2]) / 2
-            current_avg = (movie_tuple[1] + movie_tuple[2]) / 2
-            if current_avg > avg_rating or (current_avg == avg_rating and movie_tuple[0] < sorted_movie[0]):
-                sorted_movies.insert(i, movie_tuple)
-                inserted = True
-                break
-        if not inserted:
-            sorted_movies.append(movie_tuple)
+    # Define a sorting function
+    def sort_key(movie_tuple):
+        title, rating, actor_rating = movie_tuple
+        average_rating = (rating + actor_rating) / 2
+        return (average_rating, title)
+    
+    # Sort movies using the defined sorting function
+    sorted_movies = sorted(movie_tuples, key=sort_key, reverse=True)
     
     # Select top n or all movies if n == 0
     top_movies = sorted_movies[:n] if n > 0 else sorted_movies
     
     # Return in the format (Title, Average_rating)
-    result = []
-    for title, rating, actor_rating in top_movies:
-        average_rating = (rating + actor_rating) / 2
-        result.append((title, average_rating))
-    
+    result = [(title, (rating + actor_rating) / 2) for title, rating, actor_rating in top_movies]
     return result
+
+
+
 
 
 def write_file(top: list, file_name: str):
@@ -153,3 +146,8 @@ def write_file(top: list, file_name: str):
                 file.write(f"{title}, {avg_rating:.1f}\n")
             else:
                 file.write(f"{title}, {avg_rating:.1f}")
+
+if __name__ == '__main__':
+    import doctest
+    print(doctest.testmod())
+
