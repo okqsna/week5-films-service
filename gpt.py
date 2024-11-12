@@ -52,6 +52,17 @@ def top_n(data: list, genre: str = '', n: int = 0):
     Returns:
     - A list of tuples, each containing (Title, Average_rating).
     
+    Doctests:
+    >>> data = [
+    ...     ['1', 'Guardians of the Galaxy', 'Action,Adventure,Sci-Fi', 'A group of intergalactic criminals are forced to work together to stop a fanatical warrior from taking control of the universe.', 'James Gunn', 'Chris Pratt, Vin Diesel, Bradley Cooper, Zoe Saldana', '2014', '121', '8.1', '757074', '333.13', '76.0'],
+    ...     ['3', 'Split', 'Horror,Thriller', 'Three girls are kidnapped by a man with a diagnosed 23 distinct personalities. They must try to escape before the apparent emergence of a frightful new 24th.', 'M. Night Shyamalan', 'James McAvoy, Anya Taylor-Joy, Haley Lu Richardson, Jessica Sula', '2016', '117', '7.3', '157606', '138.12', '62.0']
+    ... ]
+    >>> top_n(data, genre='Action', n=1)
+    [('Guardians of the Galaxy', 8.1)]
+    >>> top_n(data, genre='', n=1)
+    [('Guardians of the Galaxy', 8.1)]
+    >>> top_n(data, genre='',   )
+    [('Guardians of the Galaxy', 8.1), ('Split', 7.3)]
     """
     
     # Parse genres if provided
@@ -104,18 +115,19 @@ def top_n(data: list, genre: str = '', n: int = 0):
     def sort_key(movie_tuple):
         title, rating, actor_rating = movie_tuple
         average_rating = (rating + actor_rating) / 2
-        return (average_rating, title)
+        return (-average_rating, title)  # Use negative average for descending order
     
     # Sort movies using the defined sorting function
-    sorted_movies = sorted(movie_tuples, key=sort_key, reverse=True)
+    sorted_movies = sorted(movie_tuples, key=sort_key)
     
     # Select top n or all movies if n == 0
-    top_movies = sorted_movies[:n] if n > 0 else sorted_movies
+    top_movies = sorted_movies[:n] if n > 0 else sorted_movies  # Ensure all movies are included if n is 0
     
     # Return in the format (Title, Average_rating)
     result = [(title, (rating + actor_rating) / 2) for title, rating, actor_rating in top_movies]
     return result
 
+ 
 
 
 
@@ -150,4 +162,3 @@ def write_file(top: list, file_name: str):
 if __name__ == '__main__':
     import doctest
     print(doctest.testmod())
-
